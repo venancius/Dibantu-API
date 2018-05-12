@@ -71,6 +71,48 @@ class Mjobs extends CI_Model {
 
 	}
 
+	public function getAvailableJobs($id,$id_city,$id_category){
+
+		$data = array(
+			"id_city" => $id_city,
+			"id_category" =>$id_category,
+			"status"=>0,
+			"id_worker"=>0
+		);
+
+		$jobs = $this->db->get_where('jobs', $data)->result_array();
+
+		foreach ($jobs as $key=>$value) {
+			if($value['exclusive_worker']!=0){
+				$exclusive_worker = explode(",",$value['exclusive_worker']);
+
+				if(!in_array($id, $exclusive_worker)){
+					unset($jobs[$key]);
+				}
+
+			}
+		}
+
+		if($jobs){
+			return $jobs;
+		}
+
+		else return false;
+
+	}
+
+	public function finishjob($id){
+		$this->db->set('status',1);
+		$this->db->where('id', $id);
+		$update = $this->db->update('jobs');
+
+		if($update){
+			return true;
+		}
+		else return false;
+
+	}
+
 }
 
 /* End of file modelName.php */

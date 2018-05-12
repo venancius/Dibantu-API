@@ -9,6 +9,7 @@ class Jobs extends CI_Controller {
 		//Do your magic here
 		$this->load->model('mjobs');
 		$this->load->model('mworker');
+		$this->load->model('maccount');
 	}
 
 	public function getlist(){
@@ -95,6 +96,64 @@ class Jobs extends CI_Controller {
 		$data = $this->mworker->getTopFive($category_id,$city_id);
 
 		return $data;
+
+	}
+
+	public function getAvailableJobs(){
+
+		$postdata = $this->input->post();
+
+		$id_worker = $postdata['id_worker'];
+
+		$workerdata = $this->maccount->getWorkerProfile($id_worker);
+		$workercity = $workerdata->id_city;
+		$workercategory = $workerdata->skill_category;
+
+		$availablejobs = $this->mjobs->getAvailableJobs($id_worker,$workercity,$workercategory);
+
+		echo json_encode($availablejobs);
+
+	}
+
+	public function finishJob(){
+
+		$postdata = $this->input->post();
+		$update = $this->mjobs->finishjob($postdata['id_jobs']);
+
+		if($update!=false){
+			$response = array(
+				"error" =>'false',
+				"message" => 'Success',
+			);
+		}
+		else{
+			$response = array(
+				"error" =>'true',
+				"message" => 'Failed'
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	public function updateExclusiveWorker(){
+
+		$query = $this->db->query("update jobs set exclusive_worker='0' where created_at < DATE_SUB(NOW(), INTERVAL 30 MINUTE)");
+
+		if($query){
+			$response = array(
+				"error" =>'false',
+				"message" => 'Exclusive worker updated',
+			);
+		}
+		else{
+			$response = array(
+				"error" =>'true',
+				"message" => 'Exclusive worker update failed'
+			);
+		}
+
+		echo json_encode($response);
 
 	}
 
