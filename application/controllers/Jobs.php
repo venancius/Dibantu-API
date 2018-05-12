@@ -8,6 +8,7 @@ class Jobs extends CI_Controller {
 		parent::__construct();
 		//Do your magic here
 		$this->load->model('mjobs');
+		$this->load->model('mworker');
 	}
 
 	public function getlist(){
@@ -43,6 +44,12 @@ class Jobs extends CI_Controller {
 	public function inputjob(){
 		$postdata = $this->input->post();
 
+		$id_category = $postdata['id_category'];
+		$id_city = $postdata['id_city'];
+
+		$topfiveworker = $this->getTopFiveWorker($id_category,$id_city);
+		$postdata['exclusive_worker'] = implode(",", $topfiveworker);
+
 		$data = $this->mjobs->inputjob($postdata);
 
 		if($data==true){
@@ -58,7 +65,7 @@ class Jobs extends CI_Controller {
 			);
 		}
 
-		echo json_encode($response);
+		echo json_encode($topfiveworker);
 	}
 
 	public function getsingle(){
@@ -81,6 +88,14 @@ class Jobs extends CI_Controller {
 		}
 
 		echo json_encode($response);
+	}
+
+	public function getTopFiveWorker($category_id,$city_id){
+
+		$data = $this->mworker->getTopFive($category_id,$city_id);
+
+		return $data;
+
 	}
 
 }
