@@ -49,7 +49,7 @@ class Mjobs extends CI_Model {
 	public function getsingle($data){
 
 		if($data['role'] == 'user'){
-			$this->db->select('jobs.*, worker.name as nassme,category.name as categoryname,worker.phone as phone,worker.picture as picture,worker.rate');
+			$this->db->select('jobs.*, worker.name as name,category.name as categoryname,worker.phone as phone,worker.picture as picture,worker.rate');
 			$this->db->join('worker', 'jobs.id_worker = worker.id', 'left');
 		}
 
