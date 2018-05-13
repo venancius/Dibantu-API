@@ -38,6 +38,29 @@ class Account extends CI_Controller {
 
 	}
 
+	public function setUserProfile(){
+		$postdata = $this->input->post();
+		$userdata = $this->maccount->setUserProfile($postdata);
+
+		if($userdata!=false){
+			$response = array(
+				"error"=>"false",
+				"message"=>"Profile Updated",
+				"userdata" =>$userdata,
+			);
+		}
+		else{
+			$response = array(
+				"error"=>"true",
+				"message"=>"Update Failed"
+			);
+		}
+
+		echo json_encode($response);
+
+	}
+
+
     public function uploadImage(){
 
     		$file = $this->input->post('userfile');
