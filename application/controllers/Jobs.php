@@ -118,7 +118,7 @@ class Jobs extends CI_Controller {
 	public function finishJob(){
 
 		$postdata = $this->input->post();
-		$update = $this->mjobs->finishjob($postdata['id_jobs']);
+		$update = $this->mjobs->finishjob($postdata['id_jobs'],$postdata['rate'],$postdata['feedback']);
 
 		if($update!=false){
 			$response = array(

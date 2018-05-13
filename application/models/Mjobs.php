@@ -101,12 +101,30 @@ class Mjobs extends CI_Model {
 
 	}
 
-	public function finishjob($id){
+	public function finishjob($id,$rate,$feedback){
 		$this->db->set('status',1);
+		$this->db->set('rate',$rate);
+		$this->db->set('feedback',$feedback);
 		$this->db->where('id', $id);
 		$update = $this->db->update('jobs');
 
-		if($update){
+		$jobdata = $this->db->get_where('jobs',array('id'=>$id))->row();
+		$id_worker = $jobdata->id_worker;
+
+		$workerdata = $this->db->get_where('worker',array('id'=>$id_worker))->row_array();
+		$worker_rate = $workerdata['rate'];
+		$worker_rate_count = $workerdata['rate_count'];
+		$new_rate_count =$worker_rate_count+1;
+
+		$new_rate = (($worker_rate*$worker_rate_count) + $rate)/$new_rate_count;
+
+		$this->db->set('rate',$new_rate);
+		$this->db->set('rate_count',$new_rate_count);
+		$this->db->where('id',$id_worker);
+		$updateall = $this->db->update('worker');
+
+
+		if($updateall){
 			return true;
 		}
 		else return false;
