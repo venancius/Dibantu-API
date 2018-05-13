@@ -12,6 +12,15 @@ class Mcity extends CI_Model {
 		else return false;
 	}
 
+	public function getsingle($id){
+		$city = $this->db->get_where('city',array('id'=>$id))->row();
+
+		if($city){
+			return $city;
+		}
+		else return false;
+	}
+
 }
 
 /* End of file mcity.php */

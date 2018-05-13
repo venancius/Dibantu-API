@@ -7,9 +7,7 @@ class Maccount extends CI_Model {
 		$query = $this->db->get('user')->result();
 		if (count($query) ==0)
 		{
-			$return['statuscode']=3012;
-        	$return['message']="user not found";
-        	return $return;
+			return false;
 		}else{
 			return $query[0];
 		}
@@ -21,9 +19,7 @@ class Maccount extends CI_Model {
 		$query = $this->db->get('worker')->result();
 		if (count($query) ==0)
 		{
-			$return['statuscode']=3012;
-        	$return['message']="user not found";
-        	return $return;
+			return false;
 		}else{
 			return $query[0];
 		}
