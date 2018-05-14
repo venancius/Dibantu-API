@@ -66,7 +66,7 @@ class Jobs extends CI_Controller {
 			);
 		}
 
-		echo json_encode($topfiveworker);
+		echo json_encode($response);
 	}
 
 	public function getsingle(){

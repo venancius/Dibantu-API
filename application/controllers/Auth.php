@@ -40,14 +40,14 @@ class Auth extends CI_Controller {
 
 		if($register==true){
 			$response = array(
-				'responseCode' =>'200',
+				'error' =>'false',
 				'message' =>'Register Success',
 			);		
 		}
 
 		else{
 			$response = array(
-				'responseCode' =>'200',
+				'error' =>'true',
 				'message' =>'Register Failed',
 			);	
 

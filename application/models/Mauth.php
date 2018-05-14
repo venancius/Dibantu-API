@@ -46,8 +46,8 @@ class Mauth extends CI_Model {
 
 				break;
 			case 'worker':
-				unset($logindata['role']);
-				$statement = $this->db->insert('user', $regdata);
+				unset($regdata['role']);
+				$statement = $this->db->insert('worker', $regdata);
 
 				break;
 			default:

@@ -11,7 +11,7 @@ class Mjobs extends CI_Model {
 		$this->db->join('category', 'jobs.id_category = category.id', 'left');
 		$this->db->join('user', 'jobs.id_user = user.id', 'left');
 		$this->db->join('worker', 'jobs.id_worker = worker.id', 'left');
-
+		$this->db->order_by('id','DESC');
 		$activejobs = $this->db->get('jobs')->result();
 
 		$this->db->select('jobs.*, worker.name as workername, user.name as username, worker.picture as workerpicture, user.picture as userpicture,category.name as categoryname');
@@ -20,7 +20,7 @@ class Mjobs extends CI_Model {
 		$this->db->join('category', 'jobs.id_category = category.id', 'left');
 		$this->db->join('user', 'jobs.id_user = user.id', 'left');
 		$this->db->join('worker', 'jobs.id_worker = worker.id', 'left');
-
+		$this->db->order_by('id','DESC');
 		$historyjobs = $this->db->get('jobs')->result();
 
 
