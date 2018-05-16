@@ -7,6 +7,13 @@ class Mjobs extends CI_Model {
 
 		$this->db->select('jobs.*, worker.name as workername, user.name as username, worker.picture as workerpicture, user.picture as userpicture,category.name as categoryname');
 		$this->db->where('jobs.status',0);
+		if(isset($data['id_user'])){
+		$this->db->where('jobs.id_user', $data['id_user']);			
+		}
+		else if(isset($data['id_worker'])){
+		$this->db->where('jobs.id_worker', $data['id_worker']);			
+		}
+
 
 		$this->db->join('category', 'jobs.id_category = category.id', 'left');
 		$this->db->join('user', 'jobs.id_user = user.id', 'left');
@@ -16,6 +23,13 @@ class Mjobs extends CI_Model {
 
 		$this->db->select('jobs.*, worker.name as workername, user.name as username, worker.picture as workerpicture, user.picture as userpicture,category.name as categoryname');
 		$this->db->where('jobs.status',1);
+		if(isset($data['id_user'])){
+		$this->db->where('jobs.id_user', $data['id_user']);			
+		}
+		else if(isset($data['id_worker'])){
+		$this->db->where('jobs.id_worker', $data['id_worker']);			
+		}
+
 
 		$this->db->join('category', 'jobs.id_category = category.id', 'left');
 		$this->db->join('user', 'jobs.id_user = user.id', 'left');
@@ -46,6 +60,19 @@ class Mjobs extends CI_Model {
 
 	}
 
+	public function takejob($id_worker,$id_job){
+		$this->db->set('id_worker',$id_worker);
+		$this->db->set('accept_count','accept_count+1');
+		$this->db->where('id', $id_job);
+		$statement = $this->db->update('jobs');
+
+		if($statement){
+			return true;
+		}
+		else return false;
+
+	}
+
 	public function getsingle($data){
 
 		if($data['role'] == 'user'){
@@ -54,7 +81,7 @@ class Mjobs extends CI_Model {
 		}
 
 		else if($data['role'] == 'worker'){
-			$this->db->select('jobs.*, user.name as name,user.phone as phone,user.picture as picture');
+			$this->db->select('jobs.*, user.name as name,category.name as categoryname,user.phone as phone,user.picture as picture');
 			$this->db->join('user', 'jobs.id_user = user.id', 'left');
 		}
 
@@ -74,12 +101,17 @@ class Mjobs extends CI_Model {
 	public function getAvailableJobs($id,$id_city,$id_category){
 
 		$data = array(
-			"id_city" => $id_city,
-			"id_category" =>$id_category,
-			"status"=>0,
-			"id_worker"=>0
+			"jobs.id_city" => $id_city,
+			"jobs.id_category" =>$id_category,
+			"jobs.status"=>0,
+			"jobs.id_worker"=>0
 		);
 
+		$this->db->select('jobs.*, worker.name as workername, user.name as username, worker.picture as workerpicture, user.picture as userpicture,category.name as categoryname');
+		$this->db->join('category', 'jobs.id_category = category.id', 'left');
+		$this->db->join('user', 'jobs.id_user = user.id', 'left');
+		$this->db->join('worker', 'jobs.id_worker = worker.id', 'left');
+		$this->db->order_by('id','DESC');
 		$jobs = $this->db->get_where('jobs', $data)->result_array();
 
 		foreach ($jobs as $key=>$value) {

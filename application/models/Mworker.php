@@ -17,10 +17,10 @@ class Mworker extends CI_Model {
 
 			foreach($workers as $worker){
 				$accept_count = $worker->accept_count;
-				$cancel_count = $worker->cancel_count;
+
 				$rate = $worker->rate;
 
-				$score = $rate + $accept_count - $cancel_count;
+				$score = $rate + $accept_count;
 
 				$BARS[] = array("id"=>$worker->id,"score"=>$score);
 			}

@@ -43,6 +43,24 @@ class Maccount extends CI_Model {
 
 	}
 
+		function setWorkerProfile($data){
+
+		$object = array(
+			"name" => $data['name'],
+			"phone" => $data['phone'],
+			"email" => $data['email']
+		);
+
+		$this->db->where('id',$data['id']);
+		$update = $this->db->update('worker', $object);
+
+		if($update){
+			return true;
+		}
+		else return false;
+
+	}
+
 
 
 

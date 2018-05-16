@@ -111,7 +111,36 @@ class Jobs extends CI_Controller {
 
 		$availablejobs = $this->mjobs->getAvailableJobs($id_worker,$workercity,$workercategory);
 
+		$tmp = array();
+		if($availablejobs==false){
+			$availablejobs = array("error"=>"true","message"=>"No Data","availablejobs"=>$tmp);
+		}
+		else{
+			$availablejobs = array("error"=>"false","message"=>"Jobs","availablejobs"=>$availablejobs);
+		}
+
 		echo json_encode($availablejobs);
+
+	}
+
+	public function takeJob(){
+		$postdata = $this->input->post();
+		$takejob = $this->mjobs->takejob($postdata['id_worker'],$postdata['id_job']);
+
+		if($takejob!=false){
+			$response = array(
+				"error" =>'false',
+				"message" => 'Job Taken',
+			);
+		}
+		else{
+			$response = array(
+				"error" =>'true',
+				"message" => 'Failed'
+			);
+		}
+
+		echo json_encode($response);
 
 	}
 

@@ -27,6 +27,7 @@ io.on('connection', function (socket) {
 
   socket.on('new job', function(msg){
     console.log('new job');
+    io.sockets.emit('new job');
   });
 
   

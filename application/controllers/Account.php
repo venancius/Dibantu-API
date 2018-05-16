@@ -38,9 +38,60 @@ class Account extends CI_Controller {
 
 	}
 
+	public function getWorkerProfile(){
+		$postdata = $this->input->post();
+		$userdata = $this->maccount->getWorkerProfile($postdata['id_worker']);
+
+		$city_id = $userdata->id_city;
+
+		$citydata = $this->mcity->getsingle($city_id);
+
+
+		if($userdata){
+			$response = array(
+				"error"=>"false",
+				"message"=>"get Worker Profile Success",
+				"userdata" =>$userdata,
+				"citydata" =>$citydata
+
+			);
+		}
+		else{
+			$response = array(
+				"error"=>"true",
+				"message"=>"User Not Found"
+			);
+		}
+		echo json_encode($response);
+
+	}
+
 	public function setUserProfile(){
 		$postdata = $this->input->post();
 		$userdata = $this->maccount->setUserProfile($postdata);
+
+		if($userdata!=false){
+			$response = array(
+				"error"=>"false",
+				"message"=>"Profile Updated",
+				"userdata" =>$userdata,
+			);
+		}
+		else{
+			$response = array(
+				"error"=>"true",
+				"message"=>"Update Failed"
+			);
+		}
+
+		echo json_encode($response);
+
+	}
+
+
+	public function setWorkerProfile(){
+		$postdata = $this->input->post();
+		$userdata = $this->maccount->setWorkerProfile($postdata);
 
 		if($userdata!=false){
 			$response = array(

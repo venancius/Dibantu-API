@@ -11,14 +11,16 @@ class Mauth extends CI_Model {
 
 	public function login($logindata){
 
-		switch ($logindata['role']) {
+		$role = $logindata['role'];
+		unset($logindata['role']);
+		switch ($role) {
 			case 'user':
-				unset($logindata['role']);
+
 				$statement = $this->db->get_where('user',$logindata);
 
 				break;
 			case 'worker':
-				unset($logindata['role']);
+
 				$statement = $this->db->get_where('worker', $logindata);
 
 				break;
@@ -28,7 +30,18 @@ class Mauth extends CI_Model {
 		}
 
 		if($statement->num_rows()>0){
-			return $this->maccount->getUserProfile($statement->row()->id);
+			switch ($role) {
+				case 'user':
+					
+					$data = $this->maccount->getUserProfile($statement->row()->id);
+
+					break;
+				case 'worker':
+					$data = $this->maccount->getWorkerProfile($statement->row()->id);
+					break;
+
+			}
+			return $data;
 		}
 		else{
 			return false;
